@@ -36,7 +36,7 @@ b() {
     fi
 
     if [ -z "$bookname" ]; then
-        echo "Error: You must provide a bookmark name using the -n flag."
+        echo "Error: You must provide a bookmark name using -n."
         echo "Use 'b -h' for help."
         return 1
     fi
