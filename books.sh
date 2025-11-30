@@ -5,6 +5,10 @@ b() {
 		case $flag in 
 			h) # Helper Flag 
 			echo "Here is what you do"
+            echo "There are Two Uses For this, Create a Bookmark, Use a Bookmark "
+            echo "b -n {name} -p {path}"
+            echo "creates a bookmark called {name} that points to {path}"
+            echo "b -n {name} or just b {name} without the flag is a shortcut for cd {path}"
             return 0 
 			;;
 			n) # Name of the Bookmark 
@@ -14,15 +18,23 @@ b() {
 			local pathname="$OPTARG"
 			;; 
 			\?) 
-			echo "You Fucked Up Give Me the Correct Arguments use -h if you need"
+			echo "You Messed Up Give Me the Correct Arguments use -h if you need"
 			;;
 	 	esac
 	done
+
 	# If no book mark config file exists make one 
     local config_file="$HOME/.config/books.sh"
     [ -e "$config_file" ] || echo "#!/bin/bash" > "$config_file"
     source "$config_file"
 	
+    # If no -n flag and a positional arg exists  treat it as bookname
+    shift $((OPTIND - 1))   # Remove processed flags
+
+    if [ -z "$bookname" ] && [ $# -ge 1 ]; then
+        local bookname="$1"
+    fi
+
     if [ -z "$bookname" ]; then
         echo "Error: You must provide a bookmark name using the -n flag."
         echo "Use 'b -h' for help."
